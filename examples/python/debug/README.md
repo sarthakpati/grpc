@@ -59,7 +59,7 @@ able to trace through the whole stack.
 
 ## gRPC Command Line Tool
 
-`grpc_cli` is a handy tool to interact with gRPC backend easily. Imageine you can
+`grpc_cli` is a handy tool to interact with gRPC backend easily. Imagine you can
 inspect what service does a server provide without writing any code, and make
 gRPC calls just like `curl`.
 
