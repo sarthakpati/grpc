@@ -115,8 +115,8 @@ def serve():
     route_guide_pb2_grpc.add_RouteGuideServicer_to_server(
         RouteGuideServicer(), server)
     
-    private_key = '~/Downloads/grpc/private_key'
-    certificate = '~/Downloads/grpc/certificate'
+    private_key = '/home/user/Downloads/grpc/private_key'
+    certificate = '/home/user/Downloads/grpc/certificate'
     with open(private_key, 'rb') as f:
       private_key = f.read()
     with open(certificate, 'rb') as f:

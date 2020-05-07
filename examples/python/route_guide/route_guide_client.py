@@ -126,8 +126,8 @@ def guide_route_chat(stub):
 
 def run():
 
-    certificate = '~/Downloads/grpc/certificate'
-    private_key = '~/Downloads/grpc/private_key'
+    certificate = '/home/user/Downloads/grpc/certificate'
+    private_key = '/home/user/Downloads/grpc/private_key'
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
     # of the code. 
