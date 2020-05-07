@@ -125,15 +125,18 @@ def guide_route_chat(stub):
 
 
 def run():
-
-    certificate = '/home/user/Downloads/grpc/certificate'
-    private_key = '/home/user/Downloads/grpc/private_key'
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
-    # of the code. 
-    # with grpc.insecure_channel('165.123.11.50:50051') as channel: # aggregator
-    # with grpc.insecure_channel('10.150.12.120:50051') as channel: # desktop
-    with create_tls_channel(addr, port, ca, disable_client_auth, certificate, private_key)
+    # of the code.
+    with open('auth.crt', 'rb') as f:
+        trusted_certs = f.read()
+
+    credentials = grpc.ssl_channel_credentials(
+      root_certificates=trusted_certs,
+      private_key=None,
+      certificate_chain=None
+    )
+    with grpc.secure_channel('remote.host.name:50051', credentials) as channel:
         stub = route_guide_pb2_grpc.RouteGuideStub(channel)
         print("-------------- GetFeature --------------")
         guide_get_feature(stub)

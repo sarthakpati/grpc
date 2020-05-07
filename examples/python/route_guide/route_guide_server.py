@@ -112,30 +112,23 @@ class RouteGuideServicer(route_guide_pb2_grpc.RouteGuideServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    route_guide_pb2_grpc.add_RouteGuideServicer_to_server(
-        RouteGuideServicer(), server)
-    
-    private_key = '/home/user/Downloads/grpc/private_key'
-    certificate = '/home/user/Downloads/grpc/certificate'
-    with open(private_key, 'rb') as f:
-      private_key = f.read()
-    with open(certificate, 'rb') as f:
-      certificate_chain = f.read()
-    with open(ca, 'rb') as f:
-      root_certificates = f.read()
+    with open('server.key', 'rb') as f:
+        key = f.read()
 
-    require_client_auth = False # set this false for simplicity
-    if not require_client_auth:
-      logger.warn('Client-side authentication is disabled.')
+    with open('server.crt', 'rb') as f:
+        cert = f.read()
+
+    with open('auth.crt', 'rb') as f:
+        root_certificates = f.read()
 
     server_credentials = grpc.ssl_server_credentials(
-        ( (private_key, certificate_chain), ),
+        ((key, cert),),
         root_certificates=root_certificates,
-        require_client_auth=require_client_auth,
-    )
-    uri = "{addr:s}:{port:d}".format(addr=addr, port=port)
-    server.add_secure_port(uri, server_credentials)    
-    # server.add_insecure_port('[::]:50051')
+        require_client_auth=False)
+
+    route_guide_pb2_grpc.add_RouteGuideServicer_to_server(
+        RouteGuideServicer(), server)
+    server.add_secure_port('[::]:50051',server_credentials)
     server.start()
     server.wait_for_termination()
 
