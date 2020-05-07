@@ -42,6 +42,31 @@ def guide_get_one_feature(stub, point):
     else:
         print("Found no feature at %s" % feature.location)
 
+# set disable_client_auth to True
+def create_tls_channel(addr, port, ca, disable_client_auth, certificate, private_key):
+
+  uri = "{addr:s}:{port:d}".format(addr=addr, port=port)
+
+  with open(ca, 'rb') as f:
+    root_certificates = f.read()
+
+  if disable_client_auth:
+    self.logger.warn("Client-side authentication is disabled.")
+    private_key = None
+    client_cert = None
+    else:
+      with open(private_key, 'rb') as f:
+        private_key = f.read()
+      with open(certificate, 'rb') as f:
+        client_cert = f.read()
+
+    credentials = grpc.ssl_channel_credentials(
+        root_certificates=root_certificates,
+        private_key=private_key,
+        certificate_chain=client_cert
+    )
+    return grpc.secure_channel(uri, credentials, options=self.channel_options)
+
 
 def guide_get_feature(stub):
     guide_get_one_feature(
@@ -100,10 +125,15 @@ def guide_route_chat(stub):
 
 
 def run():
+
+    certificate = '~/Downloads/grpc/certificate'
+    private_key = '~/Downloads/grpc/private_key'
     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
     # used in circumstances in which the with statement does not fit the needs
-    # of the code.
-    with grpc.insecure_channel('165.123.11.50:50051') as channel:
+    # of the code. 
+    # with grpc.insecure_channel('165.123.11.50:50051') as channel: # aggregator
+    # with grpc.insecure_channel('10.150.12.120:50051') as channel: # desktop
+    with create_tls_channel(addr, port, ca, disable_client_auth, certificate, private_key)
         stub = route_guide_pb2_grpc.RouteGuideStub(channel)
         print("-------------- GetFeature --------------")
         guide_get_feature(stub)

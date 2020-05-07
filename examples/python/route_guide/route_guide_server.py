@@ -132,6 +132,7 @@ def serve():
         root_certificates=root_certificates,
         require_client_auth=require_client_auth,
     )
+    uri = "{addr:s}:{port:d}".format(addr=addr, port=port)
     server.add_secure_port(uri, server_credentials)    
     # server.add_insecure_port('[::]:50051')
     server.start()
