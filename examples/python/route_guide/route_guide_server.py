@@ -112,10 +112,10 @@ class RouteGuideServicer(route_guide_pb2_grpc.RouteGuideServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    with open('server.key', 'rb') as f:
+    with open('sbia-pc103.key', 'rb') as f:
         key = f.read()
 
-    with open('server.crt', 'rb') as f:
+    with open('sbia-pc103.crt', 'rb') as f:
         cert = f.read()
 
     with open('auth.crt', 'rb') as f:
