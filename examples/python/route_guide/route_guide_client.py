@@ -136,7 +136,7 @@ def run():
       private_key=None,
       certificate_chain=None
     )
-    with grpc.secure_channel('165.123.11.50:50051', credentials) as channel:
+    with grpc.secure_channel('sbia-pc103.med.upenn.edu:50051', credentials) as channel:
         stub = route_guide_pb2_grpc.RouteGuideStub(channel)
         print("-------------- GetFeature --------------")
         guide_get_feature(stub)
