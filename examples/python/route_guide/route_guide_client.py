@@ -54,18 +54,18 @@ def create_tls_channel(addr, port, ca, disable_client_auth, certificate, private
     self.logger.warn("Client-side authentication is disabled.")
     private_key = None
     client_cert = None
-    else:
-      with open(private_key, 'rb') as f:
-        private_key = f.read()
-      with open(certificate, 'rb') as f:
-        client_cert = f.read()
+  else:
+    with open(private_key, 'rb') as f:
+      private_key = f.read()
+    with open(certificate, 'rb') as f:
+      client_cert = f.read()
 
-    credentials = grpc.ssl_channel_credentials(
+  credentials = grpc.ssl_channel_credentials(
         root_certificates=root_certificates,
         private_key=private_key,
         certificate_chain=client_cert
     )
-    return grpc.secure_channel(uri, credentials, options=self.channel_options)
+  return grpc.secure_channel(uri, credentials, options=self.channel_options)
 
 
 def guide_get_feature(stub):
